@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    {% block style %}{% endblock %}
+</head>
+
+<body style="overflow-x:hidden;">
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand">Eye Disease Detection</a>
+
+        <div>
+            <a class="nav-link text-white d-inline" href="/">Home</a>
+            <a class="nav-link text-white d-inline" href="/upload">Predict</a>
+        </div>
+    </div>
+</nav>
+
+{% block body %}{% endblock %}
+
+</body>
+</html>

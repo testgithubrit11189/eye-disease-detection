@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Eye Disease Detection</title>
+
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    overflow:auto; /* ✅ FIX */
+    background:
+linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
+url('https://images.unsplash.com/photo-1612277795421-9bc7706a4a34?auto=format&fit=crop&w=1600&q=80')
+no-repeat center center/cover;
+}
+
+#tsparticles{
+    position:fixed;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
+
+.navbar{
+    background:rgba(0,0,0,0.7);
+    color:white;
+    padding:15px;
+    text-align:center;
+    font-size:22px;
+}
+
+.container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh; /* ✅ FIX */
+    padding:20px;
+}
+
+.card{
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(15px);
+    padding:30px; /* thoda kam */
+    border-radius:25px;
+    text-align:center;
+    color:white;
+    width:90%;
+    max-width:500px;
+    box-shadow:0 25px 60px rgba(0,0,0,0.7);
+}
+
+h2{
+    margin-bottom:20px;
+}
+
+.custom-file-upload {
+    display:inline-block;
+    padding:12px 25px;
+    cursor:pointer;
+    border-radius:12px;
+    background:linear-gradient(to right,#ff7e5f,#feb47b);
+    color:white;
+    font-weight:bold;
+}
+
+.custom-file-upload input {
+    display:none;
+}
+
+button{
+    padding:12px 25px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(to right,#00c6ff,#0072ff);
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.loader{
+    margin-top:15px;
+    display:none;
+    font-weight:bold;
+}
+
+.result{
+    margin-top:20px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* ❌ REMOVE fixed footer problem */
+.footer{
+    position:relative; /* ✅ FIX */
+    margin-top:20px;
+    width:100%;
+    background:rgba(0,0,0,0.8);
+    color:#ccc;
+    text-align:center;
+    padding:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="tsparticles"></div>
+
+<div class="navbar">
+    🏥 AI Eye Disease Detection System
+</div>
+
+<div class="container">
+<div class="card">
+
+    <h2>🔬 Upload Retina Image</h2>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
+
+        <label class="custom-file-upload">
+            📁 Select Retina Image
+            <input type="file" name="photo" id="fileInput" required>
+        </label>
+
+        <div id="fileName" style="margin-top:10px; font-size:14px;"></div>
+
+        <br><br>
+        <button>Analyze Image</button>
+    </form>
+
+    <div class="loader" id="loader">
+        ⏳ Analyzing Image...
+    </div>
+
+    <!-- IMAGE -->
+    {% if src %}
+    <img src="{{ src }}" width="250" style="margin-top:15px;border-radius:15px;">
+    {% endif %}
+
+    <!-- RESULTS -->
+    {% if final_p %}
+
+    <div style="margin-top:20px;">
+
+        <h2 style="color:#00c6ff;">CNN Prediction</h2>
+        <p>{{ cnn_p }} ({{ cnn_conf }}%)</p>
+
+        <h2 style="color:#ff7e5f;">MobileNet Prediction</h2>
+        <p>{{ vit_p }} ({{ vit_conf }}%)</p>
+
+        <p style="opacity:0.7;"><h3>⬇ ON COMPARING BOTH MODELS ⬇</h3></p>
+
+        <hr style="margin:15px 0; border:1px solid rgba(255,255,255,0.2);">
+
+        <div class="result" style="
+            {% if 'normal' in final_p %} color:#00ff9d;
+            {% else %} color:#ff4d4d;
+            {% endif %}
+        ">
+            <h1>🔥Final Fusion Result</h1>
+
+            {% if 'normal' in final_p %}
+                ✔ Eye is Healthy
+            {% else %}
+                ✔ Disease Detected: {{ final_p }}
+            {% endif %}
+
+            <br>
+            Confidence Score: {{ final_conf }}%
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <br><br>
+    <a href="/">
+        <button style="background:gray;">Back</button>
+    </a>
+
+</div>
+</div>
+
+<div class="footer">
+     Eye ML Project | Swasti Gupta | Nitya
+</div>
+
+<script>
+function showLoader(){
+    document.getElementById("loader").style.display="block";
+}
+
+document.getElementById("fileInput").addEventListener("change", function(){
+    const fileName = this.files[0]?.name;
+    document.getElementById("fileName").innerHTML =
+        fileName ? "✔ Selected: " + fileName : "";
+});
+
+tsParticles.load("tsparticles", {
+    particles: {
+        number: { value: 80 },
+        size: { value: 3 },
+        move: { speed: 2 },
+        links: { enable: true },
+    }
+});
+</script>
+
+</body>
+</html>
