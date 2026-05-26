@@ -28,3 +28,7 @@ Flask
 AWS EC2
 Gunicorn
 Nginx
+
+
+# Project demo 
+Go to this link (https://drive.google.com/file/d/1W8cHNJt8ZoVrtLy9uLRgY5UxWILmwENQ/view?usp=drive_link)
